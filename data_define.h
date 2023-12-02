@@ -98,6 +98,12 @@ std::string GetString(const std::tuple<Ts...> &ts)
 }
 
 template <typename T>
+bool IsEqual(const T &t1, const T &t2)
+{
+    return t1 == t2;
+}
+
+template <typename T>
 bool IsEqualWithoutOrder(const vector<T> &t1, const vector<T> &t2)
 {
     if (t1.size() != t2.size())
