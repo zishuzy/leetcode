@@ -4,6 +4,7 @@
 #include <assert.h>
 #include <limits.h>
 #include <math.h>
+
 #include <algorithm>
 #include <cassert>
 #include <fstream>
@@ -19,67 +20,46 @@
 #include <unordered_map>
 #include <unordered_set>
 #include <vector>
+#include <format>
+
 #include <gmock/gmock.h>
 #include <gtest/gtest.h>
 
 using namespace std;
 
 template <typename T>
-void print(const T &t)
-{
-    std::cout << t << std::endl;
-}
-
-template <typename T>
-void print(const vector<T> &t)
-{
-    for (auto it = t.begin(); it != t.end(); ++it) {
-        std::cout << *it << " ";
-    }
-    std::cout << std::endl;
-}
-
-template <typename T>
-void print(const vector<vector<T> > &t)
-{
-    for (auto it = t.begin(); it != t.end(); ++it) {
-        print(*it);
-    }
-}
-
-template <typename T>
-std::string getString(const T &t)
+std::string GetString(const T &t)
 {
     return std::to_string(t);
 }
 
-std::string getString(char t)
+static inline std::string GetString(char t)
 {
     return std::string(1, t);
 }
 
-std::string getString(bool t)
+static inline std::string GetString(bool t)
 {
     return t ? "true" : "false";
 }
 
-std::string getString(const std::string &t)
+static inline std::string GetString(const std::string &t)
 {
     return t;
 }
 
-std::string getString(const char *t)
+static inline std::string GetString(const char *t)
 {
     return std::string(t);
 }
 
 template <typename T>
-std::string getString(const vector<T> &t)
+std::string GetString(const vector<T> &t)
 {
     std::string strRet;
     strRet.append("[");
     for (auto it = t.begin(); it != t.end(); ++it) {
-        strRet.append(getString(*it));
+        strRet.append(GetString(*it));
         strRet.append(", ");
     }
     if (strRet.size() > 1) {
@@ -91,7 +71,7 @@ std::string getString(const vector<T> &t)
 }
 
 template <typename T>
-std::string getString(const vector<vector<T> > &t)
+std::string GetString(const vector<vector<T> > &t)
 {
     std::string strRet;
     strRet.append("[\n");
@@ -99,36 +79,26 @@ std::string getString(const vector<vector<T> > &t)
         if (it != t.begin()) {
             strRet.append(",\n");
         }
-        strRet.append(getString(*it));
+        strRet.append(GetString(*it));
     }
     strRet.append("\n]");
     return strRet;
 }
 
 template <typename... Ts>
-std::string getString(std::tuple<Ts...> &&ts, int index = 0)
+std::string GetString(const std::tuple<Ts...> &ts)
 {
-    index = std::tuple_size<std::tuple<Ts...> >::value;
-    return std::apply(
-        [&](auto &&...ts) -> std::string {
-            return ((std::to_string(--index) + ": " + getString(ts) + "\n") + ...);
-        },
-        ts);
-}
-
-template <typename... Ts>
-std::string getString(const std::tuple<Ts...> &ts, int index = 0)
-{
-    index = std::tuple_size<std::tuple<Ts...> >::value;
-    return std::apply(
-        [&](auto &&...ts) -> std::string {
-            return ((std::to_string(--index) + ": " + getString(ts) + "\n") + ...);
-        },
-        ts);
+    int i = 0;
+    std::string result;
+    auto f_getString = [&](auto &&v) { result += std::format("{}: {}\n", i++, GetString(v)); };
+    [&]<size_t... I>(std::index_sequence<I...>) {
+        ((f_getString(std::get<I>(ts))), ...);
+    }(std::make_index_sequence<std::tuple_size_v<std::remove_reference_t<std::tuple<Ts...> > > >{});
+    return result;
 }
 
 template <typename T>
-bool isEqualWithoutOrder(const vector<T> &t1, const vector<T> &t2)
+bool IsEqualWithoutOrder(const vector<T> &t1, const vector<T> &t2)
 {
     if (t1.size() != t2.size())
         return false;
@@ -148,7 +118,7 @@ bool isEqualWithoutOrder(const vector<T> &t1, const vector<T> &t2)
 
 // 第一维不要求顺序，第二维要求
 template <typename T>
-bool isEqualWithoutOrder(const vector<vector<T> > &t1, const vector<vector<T> > &t2)
+bool IsEqualWithoutOrder(const vector<vector<T> > &t1, const vector<vector<T> > &t2)
 {
     if (t1.size() != t2.size())
         return false;
@@ -168,7 +138,7 @@ bool isEqualWithoutOrder(const vector<vector<T> > &t1, const vector<vector<T> > 
 
 // 第一维和第二维都不要求顺序
 template <typename T>
-bool isEqualWithoutOrder_2(const vector<vector<T> > &t1, const vector<vector<T> > &t2)
+bool IsEqualWithoutOrder_2(const vector<vector<T> > &t1, const vector<vector<T> > &t2)
 {
     if (t1.size() != t2.size())
         return false;
@@ -194,67 +164,19 @@ bool isEqualWithoutOrder_2(const vector<vector<T> > &t1, const vector<vector<T> 
     return bRet;
 }
 
-template <typename T>
-inline std::string ToString(T t_arg)
-{
-    std::string strvalue;
-    std::string strRet;
-    std::stringstream ss;
-    ss << t_arg;
-    return ss.str();
-}
-
-template <typename T>
-void stringHelper(std::string &str_fmt, int &n_start, T t_arg)
-{
-    std::string::size_type position;
-    position = str_fmt.find("%", n_start);
-    if (position != str_fmt.npos) {
-        if (str_fmt.at(position + 1) == '%') {
-            str_fmt.erase(position, 1);
-            n_start = position + 1;
-            stringHelper(str_fmt, n_start, t_arg);
-        } else if (str_fmt.at(position + 1) == 'v') {
-            std::string strArg = ToString(t_arg);
-            str_fmt.replace(position, 2, ToString(t_arg));
-            n_start = position + strArg.size();
-        }
-    } else {
-        n_start = str_fmt.size();
-    }
-}
-
-template <typename T0, typename... T1>
-void stringHelper(std::string &str_fmt, int &n_start, T0 t0, T1... args)
-{
-    stringHelper(str_fmt, n_start, t0);
-    if (n_start < (int)str_fmt.size()) {
-        stringHelper(str_fmt, n_start, args...);
-    }
-}
-
-template <typename... T>
-std::string fmtString(const std::string &str_fmt, T... args)
-{
-    std::string strRet = str_fmt;
-    int nStart = 0;
-    stringHelper(strRet, nStart, args...);
-    return strRet;
-}
-
-inline void TrimLeftTrailingSpaces(string &input)
+static inline void TrimLeftTrailingSpaces(string &input)
 {
     input.erase(input.begin(),
                 find_if(input.begin(), input.end(), [](int ch) { return !isspace(ch); }));
 }
 
-inline void TrimRightTrailingSpaces(string &input)
+static inline void TrimRightTrailingSpaces(string &input)
 {
     input.erase(find_if(input.rbegin(), input.rend(), [](int ch) { return !isspace(ch); }).base(),
                 input.end());
 }
 
-inline void TrimTrailingSpaces(string &input)
+static inline void TrimTrailingSpaces(string &input)
 {
     input.erase(input.begin(),
                 find_if(input.begin(), input.end(), [](int ch) { return !isspace(ch); }));
@@ -262,7 +184,7 @@ inline void TrimTrailingSpaces(string &input)
                 input.end());
 }
 
-inline std::vector<int> String2VertorInt(std::string input)
+static inline std::vector<int> String2VertorInt(std::string input)
 {
     vector<int> output;
     TrimLeftTrailingSpaces(input);
@@ -278,7 +200,7 @@ inline std::vector<int> String2VertorInt(std::string input)
     return output;
 }
 
-inline std::vector<vector<int> > String2VertorInt2(std::string input)
+static inline std::vector<vector<int> > String2VertorInt2(std::string input)
 {
     vector<vector<int> > output;
     TrimLeftTrailingSpaces(input);
@@ -298,7 +220,7 @@ inline std::vector<vector<int> > String2VertorInt2(std::string input)
     return output;
 }
 
-inline std::vector<std::string> String2VertorString(std::string input)
+static inline std::vector<std::string> String2VertorString(std::string input)
 {
     vector<string> output;
     TrimLeftTrailingSpaces(input);
@@ -319,12 +241,24 @@ inline std::vector<std::string> String2VertorString(std::string input)
 struct ListNode {
     int val;
     ListNode *next;
-    ListNode() : val(0), next(nullptr) {}
-    ListNode(int x) : val(x), next(NULL) {}
-    ListNode(int x, ListNode *next) : val(x), next(next) {}
+    ListNode()
+        : val(0)
+        , next(nullptr)
+    {
+    }
+    ListNode(int x)
+        : val(x)
+        , next(NULL)
+    {
+    }
+    ListNode(int x, ListNode *next)
+        : val(x)
+        , next(next)
+    {
+    }
 };
 
-ListNode *initListNode(std::vector<int> &&vec)
+static inline ListNode *InitListNode(std::vector<int> &&vec)
 {
     ListNode *root = NULL;
     ListNode *preNode = NULL;
@@ -341,7 +275,7 @@ ListNode *initListNode(std::vector<int> &&vec)
     return root;
 }
 
-bool isEqualListNode(ListNode *l1, ListNode *l2)
+static inline bool IsEqualListNode(ListNode *l1, ListNode *l2)
 {
     ListNode *tmp1 = l1;
     ListNode *tmp2 = l2;
@@ -360,7 +294,7 @@ bool isEqualListNode(ListNode *l1, ListNode *l2)
     return bRet;
 }
 
-std::string getString(ListNode *root)
+static inline std::string GetString(ListNode *root)
 {
     ListNode *tmp = root;
     std::string strRet = "[";
@@ -373,7 +307,7 @@ std::string getString(ListNode *root)
     return strRet;
 }
 
-void print(ListNode *root)
+static inline void PrintListNode(ListNode *root)
 {
     ListNode *tmp = root;
     std::cout << "[";
@@ -389,12 +323,27 @@ struct TreeNode {
     int val;
     TreeNode *left;
     TreeNode *right;
-    TreeNode() : val(0), left(nullptr), right(nullptr) {}
-    TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
-    TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+    TreeNode()
+        : val(0)
+        , left(nullptr)
+        , right(nullptr)
+    {
+    }
+    TreeNode(int x)
+        : val(x)
+        , left(nullptr)
+        , right(nullptr)
+    {
+    }
+    TreeNode(int x, TreeNode *left, TreeNode *right)
+        : val(x)
+        , left(left)
+        , right(right)
+    {
+    }
 };
 
-static TreeNode *CreatTree_heap(const std::vector<std::string> vec_data)
+static inline TreeNode *CreatTree_heap(const std::vector<std::string> vec_data)
 {
     if (vec_data.empty()) {
         return nullptr;
@@ -420,12 +369,12 @@ static TreeNode *CreatTree_heap(const std::vector<std::string> vec_data)
     return pRoot;
 }
 
-static TreeNode *CreatTree(const std::vector<std::string> vec_data)
+static inline TreeNode *CreatTree(const std::vector<std::string> vec_data)
 {
     if (vec_data.empty()) {
         return nullptr;
     }
-    int index = 0;
+    size_t index = 0;
     TreeNode *pRoot = new (std::nothrow) TreeNode(std::stoi(vec_data[index++]));
     std::queue<TreeNode *> queueNode;
     queueNode.push(pRoot);
@@ -449,7 +398,7 @@ static TreeNode *CreatTree(const std::vector<std::string> vec_data)
     return pRoot;
 }
 
-static TreeNode *TreeCopy(TreeNode *root)
+static inline TreeNode *TreeCopy(TreeNode *root)
 {
     if (root == nullptr) {
         return nullptr;
@@ -467,7 +416,7 @@ static TreeNode *TreeCopy(TreeNode *root)
     return rootNew;
 }
 
-static bool TreeIsEqual(const TreeNode *tree1, const TreeNode *tree2)
+static inline bool IsEqualTree(const TreeNode *tree1, const TreeNode *tree2)
 {
     if (tree1 == nullptr && tree2 == nullptr) {
         return true;
@@ -478,16 +427,16 @@ static bool TreeIsEqual(const TreeNode *tree1, const TreeNode *tree2)
     if (tree1->val != tree2->val) {
         return false;
     }
-    if (!TreeIsEqual(tree1->left, tree2->left)) {
+    if (!IsEqualTree(tree1->left, tree2->left)) {
         return false;
     }
-    if (!TreeIsEqual(tree1->right, tree2->right)) {
+    if (!IsEqualTree(tree1->right, tree2->right)) {
         return false;
     }
     return true;
 }
 
-static void TreePreorder(TreeNode *tree, std::vector<int> &vec_out, bool b_print)
+static inline void TreePreorder(TreeNode *tree, std::vector<int> &vec_out, bool b_print)
 {
     if (tree == nullptr) {
         return;
@@ -500,7 +449,7 @@ static void TreePreorder(TreeNode *tree, std::vector<int> &vec_out, bool b_print
     TreePreorder(tree->right, vec_out, b_print);
 }
 
-static std::vector<int> TreePreorder(TreeNode *tree, bool b_print)
+static inline std::vector<int> TreePreorder(TreeNode *tree, bool b_print)
 {
     std::vector<int> result;
     TreePreorder(tree, result, b_print);
@@ -510,7 +459,7 @@ static std::vector<int> TreePreorder(TreeNode *tree, bool b_print)
     return result;
 }
 
-static void TreeInorder(TreeNode *tree, std::vector<int> &vec_out, bool b_print)
+static inline void TreeInorder(TreeNode *tree, std::vector<int> &vec_out, bool b_print)
 {
     if (tree == nullptr) {
         return;
@@ -523,7 +472,7 @@ static void TreeInorder(TreeNode *tree, std::vector<int> &vec_out, bool b_print)
     TreeInorder(tree->right, vec_out, b_print);
 }
 
-static std::vector<int> TreeInorder(TreeNode *tree, bool b_print)
+static inline std::vector<int> TreeInorder(TreeNode *tree, bool b_print)
 {
     std::vector<int> result;
     TreeInorder(tree, result, b_print);
@@ -533,7 +482,7 @@ static std::vector<int> TreeInorder(TreeNode *tree, bool b_print)
     return result;
 }
 
-static void TreePostorder(TreeNode *tree, std::vector<int> &vec_out, bool b_print)
+static inline void TreePostorder(TreeNode *tree, std::vector<int> &vec_out, bool b_print)
 {
     if (tree == nullptr) {
         return;
@@ -546,7 +495,7 @@ static void TreePostorder(TreeNode *tree, std::vector<int> &vec_out, bool b_prin
     }
 }
 
-static std::vector<int> TreePostorder(TreeNode *tree, bool b_print)
+static inline std::vector<int> TreePostorder(TreeNode *tree, bool b_print)
 {
     std::vector<int> result;
     TreePostorder(tree, result, b_print);
@@ -556,7 +505,7 @@ static std::vector<int> TreePostorder(TreeNode *tree, bool b_print)
     return result;
 }
 
-static void TreeLevelorder(TreeNode *tree, std::vector<int> &vec_out, bool b_print)
+static inline void TreeLevelorder(TreeNode *tree, std::vector<int> &vec_out, bool b_print)
 {
     if (tree == nullptr) {
         return;
@@ -579,7 +528,7 @@ static void TreeLevelorder(TreeNode *tree, std::vector<int> &vec_out, bool b_pri
     }
 }
 
-static std::vector<int> TreeLevelorder(TreeNode *tree, bool b_print)
+static inline std::vector<int> TreeLevelorder(TreeNode *tree, bool b_print)
 {
     if (tree == nullptr) {
         return {};
@@ -592,8 +541,8 @@ static std::vector<int> TreeLevelorder(TreeNode *tree, bool b_print)
     return result;
 }
 
-static void TreePrint(TreeNode *node, size_t n_deepth, std::vector<bool> &vec_flag,
-                      std::string *p_strprint = nullptr)
+static inline void PrintTree(TreeNode *node, size_t n_deepth, std::vector<bool> &vec_flag,
+                             std::string *p_strprint = nullptr)
 {
     if (n_deepth > 0) {
         for (size_t i = 0; i < n_deepth - 1; i++) {
@@ -620,7 +569,7 @@ static void TreePrint(TreeNode *node, size_t n_deepth, std::vector<bool> &vec_fl
         if (p_strprint == nullptr) {
             std::cout << node->val << std::endl;
         } else {
-            p_strprint->append(fmtString("%v\n", node->val));
+            p_strprint->append(std::format("{}\n", node->val));
         }
     }
 
@@ -632,28 +581,28 @@ static void TreePrint(TreeNode *node, size_t n_deepth, std::vector<bool> &vec_fl
     } else {
         vec_flag[n_deepth] = true;
     }
-    TreePrint(node->right, n_deepth + 1, vec_flag, p_strprint);
+    PrintTree(node->right, n_deepth + 1, vec_flag, p_strprint);
     vec_flag[n_deepth] = false;
-    TreePrint(node->left, n_deepth + 1, vec_flag, p_strprint);
+    PrintTree(node->left, n_deepth + 1, vec_flag, p_strprint);
 }
 
-static void TreePrint(TreeNode *tree)
+static inline void PrintTree(TreeNode *tree)
 {
     std::vector<bool> vecFlag;
-    TreePrint(tree, 0, vecFlag);
+    PrintTree(tree, 0, vecFlag);
 }
 
-static std::string GetTreePrint(TreeNode *tree)
+static inline std::string GetStringTreePrint(TreeNode *tree)
 {
     std::string strResult;
     std::vector<bool> vecFlag;
-    TreePrint(tree, 0, vecFlag, &strResult);
+    PrintTree(tree, 0, vecFlag, &strResult);
     return strResult;
 }
 
-static std::string getString(TreeNode *root)
+static inline std::string GetString(TreeNode *root)
 {
-    return GetTreePrint(root);
+    return GetStringTreePrint(root);
 }
 
 #endif // DATA_DEFINE_H_

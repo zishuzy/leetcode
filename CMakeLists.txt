@@ -4,7 +4,7 @@ project(leetCode)
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_BUILD_TYPE "Debug")
 set(CMAKE_CXX_FLAGS_DEBUG "$ENV{CXXFLAGS} -O0 -Wall -g2 -ggdb")
 set(CMAKE_CXX_FLAGS_RELEASE "$ENV{CXXFLAGS} -O3 -Wall")
@@ -12,6 +12,6 @@ set(INCLUDE_PATH ./)
 
 include_directories("${INCLUDE_PATH}")
 
-add_executable(leetCode 0001.cpp)
+add_executable(leetCode 0002.cpp)
 
 target_link_libraries(leetCode gtest gmock)
