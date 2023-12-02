@@ -72,9 +72,9 @@ TEST(Solution, leetcode)
 
     for (auto item : testCases) {
         EXPECT_TRUE(item.IsOk()) << "\ninput:\n"
-                                 << getString(item.input) << "\nouput:\n"
-                                 << getString(item.output) << "\nexpected:\n"
-                                 << getString(item.expected);
+                                 << GetString(item.input) << "\nouput:\n"
+                                 << GetString(item.output) << "\nexpected:\n"
+                                 << GetString(item.expected);
     }
 }
 
