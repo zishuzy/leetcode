@@ -12,6 +12,6 @@ set(INCLUDE_PATH ./)
 
 include_directories("${INCLUDE_PATH}")
 
-add_executable(leetCode 0004.cpp)
+add_executable(leetCode 0005.cpp)
 
 target_link_libraries(leetCode gtest gmock)

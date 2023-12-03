@@ -4,3 +4,4 @@
 2. [两数相加，中等](https://leetcode.cn/problems/add-two-numbers/)
 3. [无重复字符的最长子串，中等](https://leetcode.cn/problems/longest-substring-without-repeating-characters/)
 4. [寻找两个正序数组的中位数，困难](https://leetcode.cn/problems/median-of-two-sorted-arrays/description/)
+5. [最长回文子串，中等](https://leetcode.cn/problems/longest-palindromic-substring/)
