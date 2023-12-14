@@ -6,3 +6,4 @@
 4. [寻找两个正序数组的中位数，困难](https://leetcode.cn/problems/median-of-two-sorted-arrays/description/)
 5. [最长回文子串，中等](https://leetcode.cn/problems/longest-palindromic-substring/)
 6. [N 字形变换，中等](https://leetcode.cn/problems/zigzag-conversion/description/)
+7. [整数反转，中等](https://leetcode.cn/problems/reverse-integer/)
