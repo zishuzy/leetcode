@@ -8,3 +8,4 @@
 6. [N 字形变换，中等](https://leetcode.cn/problems/zigzag-conversion/description/)
 7. [整数反转，中等](https://leetcode.cn/problems/reverse-integer/)
 8. [字符串转换整数 (atoi)，中等](https://leetcode.cn/problems/string-to-integer-atoi/description/)
+9. [回文数，简单](https://leetcode.cn/problems/palindrome-number/description/)
