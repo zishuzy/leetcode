@@ -7,3 +7,4 @@
 5. [最长回文子串，中等](https://leetcode.cn/problems/longest-palindromic-substring/)
 6. [N 字形变换，中等](https://leetcode.cn/problems/zigzag-conversion/description/)
 7. [整数反转，中等](https://leetcode.cn/problems/reverse-integer/)
+8. [字符串转换整数 (atoi)，中等](https://leetcode.cn/problems/string-to-integer-atoi/description/)
