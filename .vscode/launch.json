@@ -5,10 +5,19 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "(gdb) 启动",
+            "name": "(lldb) Launch",
+            "type": "lldb",
+            "request": "launch",
+            "program": "${workspaceFolder}/build/leetcode",
+            "args": [],
+            "cwd": "${workspaceFolder}/build",
+            "preLaunchTask": "make"
+        },
+        {
+            "name": "(gdb) Launch",
             "type": "gdb",
             "request": "launch",
-            "target": "${workspaceFolder}/build/leetCode",
+            "target": "${workspaceFolder}/build/leetcode",
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}/build",
             "preLaunchTask": "make"
