@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.9)
 
-project(leetCode)
+project(leetcode)
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
@@ -12,6 +12,6 @@ set(INCLUDE_PATH ./)
 
 include_directories("${INCLUDE_PATH}")
 
-add_executable(leetCode 0009.cpp)
+add_executable(leetcode 0010.cpp)
 
-target_link_libraries(leetCode gtest gmock)
+target_link_libraries(leetcode gtest gmock)
