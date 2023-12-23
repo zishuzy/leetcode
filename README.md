@@ -18,3 +18,4 @@
 16. [最接近的三数之和，中等](https://leetcode.cn/problems/3sum-closest/description/)
 17. [电话号码的字母组合，中等](https://leetcode.cn/problems/letter-combinations-of-a-phone-number/description/)
 18. [四数之和，中等](https://leetcode.cn/problems/4sum/description/)
+19. [删除链表的倒数第 N 个结点，中等](https://leetcode.cn/problems/remove-nth-node-from-end-of-list/)
