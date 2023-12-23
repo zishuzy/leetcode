@@ -349,7 +349,7 @@ struct TreeNode {
     }
 };
 
-static inline TreeNode *CreatTree_heap(const std::vector<std::string> vec_data)
+static inline TreeNode *CreateTree_heap(const std::vector<std::string> vec_data)
 {
     if (vec_data.empty()) {
         return nullptr;
@@ -375,7 +375,7 @@ static inline TreeNode *CreatTree_heap(const std::vector<std::string> vec_data)
     return pRoot;
 }
 
-static inline TreeNode *CreatTree(const std::vector<std::string> vec_data)
+static inline TreeNode *CreateTree(const std::vector<std::string> vec_data)
 {
     if (vec_data.empty()) {
         return nullptr;
