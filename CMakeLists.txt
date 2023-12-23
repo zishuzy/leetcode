@@ -2,8 +2,19 @@ cmake_minimum_required(VERSION 3.9)
 
 project(leetcode)
 
-SET(CMAKE_C_COMPILER /opt/homebrew/opt/llvm/bin/clang)
-SET(CMAKE_CXX_COMPILER /opt/homebrew/opt/llvm/bin/clang++)
+IF(CMAKE_SYSTEM_NAME MATCHES "Linux")
+    message(STATUS "current platform: Linux ")
+ELSEIF(CMAKE_SYSTEM_NAME MATCHES "Windows")
+    message(STATUS "current platform: Windows")
+ELSEIF(CMAKE_SYSTEM_NAME MATCHES "Darwin")
+    message(STATUS "current platform: Mac os x")
+    SET(CMAKE_C_COMPILER /opt/homebrew/opt/llvm/bin/clang)
+    SET(CMAKE_CXX_COMPILER /opt/homebrew/opt/llvm/bin/clang++)
+    SET(INC_PATH_EXTRA "/opt/homebrew/opt/llvm/include" "/opt/homebrew/Cellar/googletest/1.14.0/include")
+    SET(LINK_PATH_EXTRA "/opt/homebrew/opt/llvm/lib" "/opt/homebrew/Cellar/googletest/1.14.0/lib")
+ELSE()
+    message(STATUS "other platform: ${CMAKE_SYSTEM_NAME}")
+ENDIF(CMAKE_SYSTEM_NAME MATCHES "Linux")
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
@@ -13,13 +24,11 @@ set(CMAKE_CXX_FLAGS_DEBUG "$ENV{CXXFLAGS} -O0 -Wall -g2 -ggdb")
 set(CMAKE_CXX_FLAGS_RELEASE "$ENV{CXXFLAGS} -O3 -Wall")
 
 link_directories(
-    /opt/homebrew/opt/llvm/lib
-    /opt/homebrew/Cellar/googletest/1.14.0/lib
+    ${LINK_PATH_EXTRA}
 )
 
 include_directories(
-    /opt/homebrew/opt/llvm/include
-    /opt/homebrew/Cellar/googletest/1.14.0/include
+    ${INC_PATH_EXTRA}
     ./
 )
 
