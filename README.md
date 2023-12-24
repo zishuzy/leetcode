@@ -22,3 +22,4 @@
 20. [有效的括号，简单](https://leetcode.cn/problems/valid-parentheses/)
 21. [合并两个有序链表，简单](https://leetcode.cn/problems/merge-two-sorted-lists/description/)
 22. [括号生成，中等](https://leetcode.cn/problems/generate-parentheses/description/)
+23. [合并 K 个升序链表，困难](https://leetcode.cn/problems/merge-k-sorted-lists/description/)
