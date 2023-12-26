@@ -281,6 +281,23 @@ static inline ListNode *InitListNode(std::vector<int> &&vec)
     return root;
 }
 
+static inline ListNode *CopyListNode(ListNode *head)
+{
+    ListNode *root = nullptr, *node;
+    while (head != nullptr) {
+        if (root == nullptr) {
+            root = new (std::nothrow) ListNode(head->val);
+            node = root;
+        } else {
+            node->next = new (std::nothrow) ListNode(head->val);
+            node = node->next;
+        }
+        head = head->next;
+    }
+
+    return root;
+}
+
 static inline bool IsEqualListNode(ListNode *l1, ListNode *l2)
 {
     ListNode *tmp1 = l1;
