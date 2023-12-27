@@ -26,3 +26,4 @@
 24. [两两交换链表中的节点，中等](https://leetcode.cn/problems/swap-nodes-in-pairs/description/)
 25. [K 个一组翻转链表，困难](https://leetcode.cn/problems/reverse-nodes-in-k-group/description/)
 26. [删除有序数组中的重复项，简单](https://leetcode.cn/problems/remove-duplicates-from-sorted-array/description/)
+27. [移除元素，简单](https://leetcode.cn/problems/remove-element/description/)
