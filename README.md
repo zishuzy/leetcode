@@ -32,3 +32,4 @@
 30. [串联所有单词的子串，困难](https://leetcode.cn/problems/substring-with-concatenation-of-all-words/)
 31. [下一个排列，中等](https://leetcode.cn/problems/next-permutation/description/)
 32. [最长有效括号，困难](https://leetcode.cn/problems/longest-valid-parentheses/)
+33. [搜索旋转排序数组，中等](https://leetcode.cn/problems/search-in-rotated-sorted-array/)

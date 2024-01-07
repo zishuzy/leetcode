@@ -32,6 +32,6 @@ include_directories(
     ./
 )
 
-add_executable(leetcode 0032.cpp)
+add_executable(leetcode 0033.cpp)
 
 target_link_libraries(leetcode gtest gmock)
