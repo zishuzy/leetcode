@@ -30,3 +30,4 @@
 28. [找出字符串中第一个匹配项的下标，简单](https://leetcode.cn/problems/find-the-index-of-the-first-occurrence-in-a-string/description/)
 29. [两数相除，中等](https://leetcode.cn/problems/divide-two-integers/description/)
 30. [串联所有单词的子串](https://leetcode.cn/problems/substring-with-concatenation-of-all-words/)
+31. [下一个排列](https://leetcode.cn/problems/next-permutation/description/)
