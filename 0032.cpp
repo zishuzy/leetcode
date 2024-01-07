@@ -1,7 +1,8 @@
 /**
  * @file 0032.cpp
  * @author zishu (zishuzy@gmail.com)
- * @brief
+ * @brief 最长有效括号，困难
+ *      https://leetcode.cn/problems/longest-valid-parentheses/
  * @version 0.1
  * @date 2024-01-07
  *
