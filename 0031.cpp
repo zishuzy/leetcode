@@ -1,7 +1,7 @@
 /**
  * @file 0031.cpp
  * @author zishu (zishuzy@gmail.com)
- * @brief 下一个排列
+ * @brief 下一个排列，中等
  *      https://leetcode.cn/problems/next-permutation/description/
  * @version 0.1
  * @date 2024-01-07
