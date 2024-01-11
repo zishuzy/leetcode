@@ -34,3 +34,4 @@
 32. [最长有效括号，困难](https://leetcode.cn/problems/longest-valid-parentheses/)
 33. [搜索旋转排序数组，中等](https://leetcode.cn/problems/search-in-rotated-sorted-array/)
 34. [在排序数组中查找元素的第一个和最后一个位置，中等](https://leetcode.cn/problems/find-first-and-last-position-of-element-in-sorted-array/description/)
+35. [搜索插入位置，简单](https://leetcode.cn/problems/search-insert-position/description/)
