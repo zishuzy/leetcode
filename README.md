@@ -37,3 +37,4 @@
 35. [搜索插入位置，简单](https://leetcode.cn/problems/search-insert-position/description/)
 36. [有效的数独，中等](https://leetcode.cn/problems/valid-sudoku/)
 37. [解数独，困难](https://leetcode.cn/problems/sudoku-solver/description/)
+38. [外观数列，中等](https://leetcode.cn/problems/count-and-say/description/)
